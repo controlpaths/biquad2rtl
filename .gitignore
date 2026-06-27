@@ -1,0 +1,15 @@
+# Python virtual environment and caches
+.venv/
+__pycache__/
+*.pyc
+
+# Generated RTL (produced by `make`)
+output/
+
+# Simulation artifacts
+*.vcd
+*.out
+
+# Generated artifacts in examples/* (recreate via its README)
+examples/*/filter_log.csv
+examples/*/filter_log.png

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "filter2rtl": {
+      "command": ".venv/bin/python",
+      "args": ["mcp/mcp_server.py"]
+    }
+  }
+}
