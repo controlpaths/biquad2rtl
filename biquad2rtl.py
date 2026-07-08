@@ -262,7 +262,7 @@ def report(filter_type, fc_norm, fs, q, data_width, frac_width,
     scale = 1 << frac_width
     fc_hz = fc_norm * fs
 
-    print("filter2rtl - biquad design")
+    print("biquad2rtl - biquad design")
     print(f"  type:    {filter_type}")
     if abs(fs - 1.0) < 1e-12:
         print(f"  fc:      {fc_norm:g}*fs (normalized)")

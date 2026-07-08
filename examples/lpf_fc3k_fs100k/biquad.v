@@ -1,6 +1,6 @@
 /**
   Module name: biquad
-  Author: filter2rtl
+  Author: biquad2rtl
   Date: 
   Description: Second-order IIR filter (biquad), Direct Form I. Fixed-point arithmetic in Q(frac_width). Widths and coefficients are fixed localparams (not overridable from above). Configured as a 32-bit Q20 lowpass section (b=[0.00782021, 0.0156404, 0.00782021], a=[1, -1.73473, 0.766007]).
   Version: 1.0

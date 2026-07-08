@@ -1,6 +1,6 @@
 # Example: bandpass biquad, fc = 25 kHz, fs = 1 MHz, Q = 20
 
-End-to-end example of the `filter2rtl` flow: generate the RTL for a bandpass
+End-to-end example of the `biquad2rtl` flow: generate the RTL for a bandpass
 biquad, simulate it with a set of tones around the pass-band, log the
 input/output samples to a CSV and plot the result.
 

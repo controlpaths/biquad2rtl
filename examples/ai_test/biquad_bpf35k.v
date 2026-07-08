@@ -1,14 +1,14 @@
 /**
-  Module name: biquad
+  Module name: biquad_bpf35k
   Author: biquad2rtl
-  Date: 
-  Description: Second-order IIR filter (biquad), Direct Form I. Fixed-point arithmetic in Q(frac_width). Widths and coefficients are fixed localparams (not overridable from above). Configured as a 32-bit Q20 notch section (b=[0.996104, -1.96768, 0.996104], a=[1, -1.96768, 0.992209]).
+  Date:
+  Description: Second-order IIR filter (biquad), Direct Form I. Fixed-point arithmetic in Q(frac_width). Widths and coefficients are fixed localparams (not overridable from above). Configured as a 32-bit Q20 bandpass section (b=[0.005424, 0, -0.005424], a=[1, -1.94125, 0.989152]).
   Version: 1.0
   History:
     1.0 - Module created
 **/
 
-module biquad (
+module biquad_bpf35k (
   input wire aclk,
   input wire aresetn,
 
@@ -24,22 +24,22 @@ module biquad (
   localparam [31:0] data_width = 32; /* sample and coefficient width in bits */
   localparam [31:0] frac_width = 20; /* number of fractional bits (Q format) */
 
-  /* Implemented filter: 2nd-order (biquad) IIR notch, Direct Form I.
+  /* Implemented filter: 2nd-order (biquad) IIR bandpass, Direct Form I.
      Transfer function: H(z) = (b0 + b1*z^-1 + b2*z^-2) / (1 + a1*z^-1 + a2*z^-2)
-       numerator   b = [0.996104, -1.96768, 0.996104]  -> zeros at 0.9877 +/- j0.1564 (radius 1)
-       denominator a = [1, -1.96768, 0.992209]  -> poles at 0.9838 +/- j0.1558 (radius 0.9961)
+       numerator   b = [0.005424, 0, -0.005424]  -> zeros at z = -1 and z = 1
+       denominator a = [1, -1.94125, 0.989152]  -> poles at 0.9706 +/- j0.2169 (radius 0.9946)
      Characteristics (frequencies normalized to the sampling rate fs):
-       - type:            notch, rejects a narrow band around fc, unity gain elsewhere
-       - DC gain:         0 dB; gain at Nyquist (fs/2): 0 dB
-       - cutoff (-3 dB):  fc ~= 0.025*fs (about fs/40.0)
+       - type:            bandpass, pass-band centered at fc, attenuating both DC and Nyquist
+       - DC gain:         -inf (full attenuation); gain at Nyquist (fs/2): -inf (full attenuation)
+       - cutoff (-3 dB):  fc ~= 0.035*fs (about fs/28.6)
        - quality factor:  Q ~= 20 (above the Butterworth value 0.707, so it shows a resonant peak)
      Coefficients are stored as 32-bit signed Q20 fixed point (1 sign, 11 integer, 20 fractional bits):
        real_value = q20_value / 2^20. */
-  localparam signed [data_width-1:0] coeff_b0 = 32'sd1044491; /* b0 = 0.996104 in Q20 */
-  localparam signed [data_width-1:0] coeff_b1 = -32'sd2063263; /* b1 = -1.96768 in Q20 */
-  localparam signed [data_width-1:0] coeff_b2 = 32'sd1044491; /* b2 = 0.996104 in Q20 */
-  localparam signed [data_width-1:0] coeff_a1 = -32'sd2063263; /* a1 = -1.96768 in Q20 */
-  localparam signed [data_width-1:0] coeff_a2 = 32'sd1040406; /* a2 = 0.992209 in Q20 */
+  localparam signed [data_width-1:0] coeff_b0 = 32'sd5687; /* b0 = 0.005424 in Q20 */
+  localparam signed [data_width-1:0] coeff_b1 = 32'sd0; /* b1 = 0 in Q20 */
+  localparam signed [data_width-1:0] coeff_b2 = -32'sd5687; /* b2 = -0.005424 in Q20 */
+  localparam signed [data_width-1:0] coeff_a1 = -32'sd2035545; /* a1 = -1.94125 in Q20 */
+  localparam signed [data_width-1:0] coeff_a2 = 32'sd1037201; /* a2 = 0.989152 in Q20 */
 
   localparam [31:0] PROD_WIDTH = 2*data_width; /* width of a coefficient times sample product */
   localparam [31:0] ACC_WIDTH = (2*data_width) + 3; /* accumulator width: product plus 3 guard bits */

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MCP server exposing the filter2rtl biquad generator as tools.
+"""MCP server exposing the biquad2rtl biquad generator as tools.
 
 It lets an MCP client (e.g. Claude Code / Claude Desktop) design a second-order
 IIR (biquad) filter and obtain the synthesizable Verilog, or just inspect the
@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import biquad
 import biquad2rtl
 
-mcp = FastMCP("filter2rtl")
+mcp = FastMCP("biquad2rtl")
 
 FilterType = Literal["lowpass", "highpass", "bandpass", "notch"]
 _BUTTERWORTH_Q = float(biquad2rtl.BUTTERWORTH_Q)

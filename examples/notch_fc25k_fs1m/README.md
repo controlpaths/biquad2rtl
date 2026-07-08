@@ -1,6 +1,6 @@
 # Example: notch biquad, fc = 25 kHz, fs = 1 MHz, Q = 20
 
-End-to-end example of the `filter2rtl` flow: generate the RTL for a notch
+End-to-end example of the `biquad2rtl` flow: generate the RTL for a notch
 biquad, simulate it with a set of tones around the notch, log the input/output
 samples to a CSV and plot the result.
 

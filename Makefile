@@ -1,4 +1,4 @@
-# filter2rtl - generate a fixed-point biquad RTL from a filter specification.
+# biquad2rtl - generate a fixed-point biquad RTL from a filter specification.
 #
 # The default target creates a Python virtual environment (if missing), installs
 # the dependencies from requirements.txt and runs biquad2rtl.py to emit biquad.v.

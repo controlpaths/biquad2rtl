@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Registers the filter2rtl MCP server and links the add-biquad-filter skill
+# Registers the biquad2rtl MCP server and links the add-biquad-filter skill
 # into the user's Claude Code installation, so both are available from any
 # project (not just while working inside this repo).
 #
@@ -26,11 +26,11 @@ fi
 echo "==> Ensuring the Python virtual environment exists (make venv)"
 make -C "$REPO_ROOT" venv
 
-echo "==> Registering the filter2rtl MCP server (scope: $SCOPE)"
-if claude mcp list 2>/dev/null | grep -q "^filter2rtl"; then
-  echo "    filter2rtl is already registered, skipping (run 'claude mcp remove filter2rtl' first to reinstall)"
+echo "==> Registering the biquad2rtl MCP server (scope: $SCOPE)"
+if claude mcp list 2>/dev/null | grep -q "^biquad2rtl"; then
+  echo "    biquad2rtl is already registered, skipping (run 'claude mcp remove biquad2rtl' first to reinstall)"
 else
-  claude mcp add filter2rtl --scope "$SCOPE" -- "$VENV_PYTHON" "$MCP_SERVER"
+  claude mcp add biquad2rtl --scope "$SCOPE" -- "$VENV_PYTHON" "$MCP_SERVER"
 fi
 
 echo "==> Linking the add-biquad-filter skill into ~/.claude/skills"

@@ -39,7 +39,7 @@ module ai_test_tb ();
   end
 
   /* DUT: no filter has been generated for this signal yet. Once one is added
-     here (e.g. with the add-biquad-filter skill or the filter2rtl MCP tools)
+     here (e.g. with the add-biquad-filter skill or the biquad2rtl MCP tools)
      it should consume signal_reg/dvalid and drive y/y_valid instead of this
      passthrough. */
   // Insert filter here
@@ -97,7 +97,7 @@ module ai_test_tb ();
     /* composite signal: 10kHz, 20kHz, 30kHz, 35kHz and 40kHz harmonics, fs = 1Msps */
     begin
       $display("Test 1: Composite signal with harmonics at 10k/20k/30k/35k/40k Hz, fs = 1Msps");
-      $display("Expected output: identical to the input (no filter inserted yet)");
+      $display("Expected output: bandpass filtered, only the 35kHz harmonic passes (fc = 35kHz, fs = 1Msps, Q = 20)");
       drive_composite(8192);
     end
   endtask

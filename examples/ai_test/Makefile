@@ -5,7 +5,7 @@ MGR_TOP = ai_test_tb
 MGR_OUT = ai_test_tb.out
 MGR_VCD = data.vcd
 MGR_CSV = filter_log.csv
-MGR_SRC = ./ai_test_tb.v
+MGR_SRC = ./ai_test_tb.v ./biquad_bpf35k.v
 
 .PHONY: all run_manager clean
 

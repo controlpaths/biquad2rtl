@@ -1,6 +1,6 @@
 # Example: high-pass biquad, fc = 10 kHz, fs = 200 kHz, Q = 3 (Q5.10)
 
-End-to-end example of the `filter2rtl` flow: generate the RTL for a high-pass
+End-to-end example of the `biquad2rtl` flow: generate the RTL for a high-pass
 biquad, simulate it with a sine sweep, log the input/output samples to a CSV and
 plot the result.
 

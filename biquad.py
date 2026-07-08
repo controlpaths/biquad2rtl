@@ -22,7 +22,7 @@ MODULE_NAME = "biquad"
 # literal braces of Verilog concatenations (e.g. {data_width{1'b0}}) are kept.
 TEMPLATE = Template("""/**
   Module name: biquad
-  Author: filter2rtl
+  Author: biquad2rtl
   Date: 
   Description: Second-order IIR filter (biquad), Direct Form I. Fixed-point arithmetic in Q(frac_width). Widths and coefficients are fixed localparams (not overridable from above). Configured as a ${data_width}-bit Q${frac_width} ${filter_type} section (b=${b_real_list}, a=${a_real_list}).
   Version: 1.0

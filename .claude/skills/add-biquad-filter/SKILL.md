@@ -1,6 +1,6 @@
 ---
 name: add-biquad-filter
-description: This skill should be used when, while editing a Verilog/SystemVerilog file, the user asks to add or insert a filter into an existing module - e.g. "add a lowpass filter in this module that filters x and returns y", "mete un notch a esta señal", "filter this input with a bandpass". It designs the biquad with filter2rtl, places the RTL and wires a ready-to-synthesize instance into the target module, adapting widths, fixed-point format and the valid handshake to the surrounding code.
+description: This skill should be used when, while editing a Verilog/SystemVerilog file, the user asks to add or insert a filter into an existing module - e.g. "add a lowpass filter in this module that filters x and returns y", "mete un notch a esta señal", "filter this input with a bandpass". It designs the biquad with biquad2rtl, places the RTL and wires a ready-to-synthesize instance into the target module, adapting widths, fixed-point format and the valid handshake to the surrounding code.
 version: 1.0.0
 ---
 
@@ -9,7 +9,7 @@ version: 1.0.0
 Use this skill to take a filter request expressed against existing RTL ("filter
 this input, give me this filtered output") and turn it into a working,
 synthesizable instance wired into the user's module. The filter math is handled
-by the `filter2rtl` generator in this repository; this skill owns the
+by the `biquad2rtl` generator in this repository; this skill owns the
 *integration* — reading the host module, choosing matching parameters, and
 cabling the instance.
 
@@ -67,8 +67,20 @@ clash, and use that name in the instance.
 ## Wire the instance — adapt to the target module
 
 This is the core of the skill: the instance must match the host, not the other
-way around. Insert a `u_<name>`-prefixed instance and adapt as follows:
+way around. Follow the format of `output/<module>_instantiation_template.v`
+(generated alongside the RTL): a filter-characteristics comment block directly
+above the instance, then the instance itself. Insert a `u_<name>`-prefixed
+instance and adapt as follows:
 
+- **Filter-info comment**: immediately above the instance, reproduce the
+  `/* Implemented filter: ... */` block from the generated module/template
+  (transfer function, numerator/denominator, zeros/poles, type, DC/Nyquist
+  gain, −3 dB cutoff, Q) so the instance is self-documenting at the call site.
+- **Port formatting**: one port per line, connected as `.port(signal),` with
+  **no whitespace padding for column alignment** — match the template exactly
+  (e.g. `.aclk(aclk), /* clock */`, not `.aclk    (aclk), /* clock */`). Keep
+  the template's inline `/* ... */` port comments, updated to name the host's
+  actual signals where useful.
 - **Clock/reset**: connect `.aclk` and `.aresetn` to the host's clock and reset.
   If the host reset is active-high, invert it through a declared wire (no inline
   `wire foo = ~rst;` — declare then `assign`).

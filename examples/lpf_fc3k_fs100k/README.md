@@ -1,6 +1,6 @@
 # Example: low-pass biquad, fc = 3 kHz, fs = 100 kHz
 
-End-to-end example of the `filter2rtl` flow: generate the RTL for a Butterworth
+End-to-end example of the `biquad2rtl` flow: generate the RTL for a Butterworth
 low-pass biquad, simulate it with a sine sweep, log the input/output samples to a
 CSV and plot the result.
 

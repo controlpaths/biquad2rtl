@@ -3,7 +3,7 @@
 Unlike the other examples, this one does not ship with a pre-generated
 `biquad.v`. It is the **starting point** for exercising the
 [`add-biquad-filter` skill](../../.claude/skills/add-biquad-filter/SKILL.md)
-and the `filter2rtl` MCP server end to end: a testbench drives a signal made of
+and the `biquad2rtl` MCP server end to end: a testbench drives a signal made of
 five harmonics into a placeholder "DUT" section, and you ask Claude to design
 and wire the filter that lets one of them through.
 
@@ -30,7 +30,7 @@ fixed-point format (`DATA_WIDTH = 32`, `FRAC_WIDTH = 20`) used by the other
 - **Python 3** with `numpy` and `matplotlib` for `plot_log.py`. The repository
   `Makefile` installs them into a virtual environment when generating a filter,
   or install them manually with `pip install numpy matplotlib`.
-- Claude Code with the `filter2rtl` MCP server and the `add-biquad-filter`
+- Claude Code with the `biquad2rtl` MCP server and the `add-biquad-filter`
   skill available (see [Using the skill and MCP server from any
   project](../../readme.md#using-the-skill-and-mcp-server-from-any-project) in
   the repository root, or just run `../../install.sh` once).

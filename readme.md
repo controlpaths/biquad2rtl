@@ -1,4 +1,4 @@
-# filter2rtl
+# biquad2rtl
 
 Generate synthesizable Verilog for a **second-order IIR filter** (biquad) from a
 short filter specification. The tool designs the filter from a type, a
@@ -25,7 +25,7 @@ module as non-overridable `localparam`s.
 ## Project layout
 
 ```
-filter2rtl/
+biquad2rtl/
 ├── biquad.py        # Verilog module template (string.Template) + render()
 ├── biquad2rtl.py    # CLI: design, characterize, quantize, generate biquad.v
 ├── mcp/
@@ -137,7 +137,7 @@ paths relative to the project root:
 ```json
 {
   "mcpServers": {
-    "filter2rtl": {
+    "biquad2rtl": {
       "command": ".venv/bin/python",
       "args": ["mcp/mcp_server.py"]
     }
@@ -175,7 +175,7 @@ directly — the skill is for the in-place integration case.
 ## Using the skill and MCP server from any project
 
 The steps above enable both only while Claude Code runs inside this
-repository. To use `add-biquad-filter` and the `filter2rtl` MCP server while
+repository. To use `add-biquad-filter` and the `biquad2rtl` MCP server while
 editing RTL in *any* project, register them once in your personal Claude Code
 installation.
 
@@ -197,7 +197,7 @@ CLI in `PATH`.
 
 ```sh
 make venv   # make sure .venv exists first
-claude mcp add filter2rtl --scope user \
+claude mcp add biquad2rtl --scope user \
   -- /path/to/biquad2rtl/.venv/bin/python /path/to/biquad2rtl/mcp/mcp_server.py
 ```
 

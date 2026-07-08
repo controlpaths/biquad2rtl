@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "filter2rtl": {
+    "biquad2rtl": {
       "command": ".venv/bin/python",
       "args": ["mcp/mcp_server.py"]
     }
