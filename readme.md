@@ -31,8 +31,10 @@ filter2rtl/
 ├── mcp/
 │   ├── mcp_server.py  # MCP server exposing the generator as tools
 │   └── .mcp.json      # sample MCP client configuration
+├── .claude/skills/add-biquad-filter/  # Claude Code skill: integrate a filter into existing RTL
 ├── requirements.txt # Python dependencies (numpy, scipy, matplotlib, mcp)
 ├── Makefile         # creates the venv, installs deps and runs the generator
+├── install.sh       # registers the MCP server and links the skill user-wide
 ├── output/          # generated artifacts (created at runtime, git-ignored)
 └── readme.md
 ```
@@ -148,6 +150,75 @@ file there (`cp mcp/.mcp.json .mcp.json`) to enable it. For clients that need
 absolute paths (e.g. Claude Desktop), replace them with the full paths to
 `.venv/bin/python` and `mcp/mcp_server.py`. Run `make venv` once beforehand so
 the environment exists.
+
+## Claude Code skill
+
+The repository also ships a Claude Code skill, `add-biquad-filter`
+(`.claude/skills/add-biquad-filter/SKILL.md`), that goes one step beyond
+generating a standalone module: it **integrates** a filter into an existing
+Verilog/SystemVerilog file. When, while editing RTL, you ask something like
+"add a lowpass that filters `x` and returns `y` in this module", the skill:
+
+- reads the host module and infers the filter spec, the input/output signals,
+  and the surrounding clock/reset and sample cadence;
+- generates the biquad through the MCP tools (or the CLI as a fallback), matching
+  the host's `--data-width` and `--frac-width` (Q format);
+- saves the RTL into the project's `rtl/` directory, renaming the module when
+  needed to avoid a name clash;
+- wires a `u_`-prefixed instance into the module, adapting the clock/reset, the
+  `x_valid`/`y_valid` handshake (or tying valid high for a continuous stream) and
+  any width/Q bridging, following the workspace Verilog style.
+
+If you only need a standalone `biquad.v`, keep using the CLI or the MCP tools
+directly — the skill is for the in-place integration case.
+
+## Using the skill and MCP server from any project
+
+The steps above enable both only while Claude Code runs inside this
+repository. To use `add-biquad-filter` and the `filter2rtl` MCP server while
+editing RTL in *any* project, register them once in your personal Claude Code
+installation.
+
+### Quick install
+
+`install.sh` automates both steps below (venv, `claude mcp add`, and the
+skill symlink):
+
+```sh
+./install.sh                # registers the MCP server with --scope user
+./install.sh --scope project  # registers it for the current project instead
+```
+
+It is idempotent — safe to re-run after a `git pull`, and it won't overwrite
+an existing skill symlink that points somewhere else. Requires the `claude`
+CLI in `PATH`.
+
+### MCP server (user-wide)
+
+```sh
+make venv   # make sure .venv exists first
+claude mcp add filter2rtl --scope user \
+  -- /path/to/biquad2rtl/.venv/bin/python /path/to/biquad2rtl/mcp/mcp_server.py
+```
+
+Replace `/path/to/biquad2rtl` with the absolute path to this repository, then
+check it with `claude mcp list`. Use `--scope project` instead of `--scope
+user` to enable it only for the project you're currently in (equivalent to
+copying `mcp/.mcp.json` to that project's root).
+
+### Skill (user-wide)
+
+```sh
+mkdir -p ~/.claude/skills
+ln -s /path/to/biquad2rtl/.claude/skills/add-biquad-filter ~/.claude/skills/add-biquad-filter
+```
+
+Using a symlink (instead of copying the folder) means `git pull` in this repo
+keeps the installed skill up to date automatically, with no manual re-copy
+step. Claude Code picks up user-level skills from `~/.claude/skills/` on the
+next session, no restart needed. Keep the MCP server registered as above so
+the skill calls `generate_biquad_rtl`/`characterize_biquad` directly instead
+of falling back to the CLI.
 
 ## Generated module
 
